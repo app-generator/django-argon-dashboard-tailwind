@@ -1,0 +1,7 @@
+django
+gunicorn
+python-dotenv
+whitenoise
+
+# psycopg2-binary
+# mysqlclient
