@@ -1,0 +1,12 @@
+{% load i18n admin_urls %}
+{% block object-tools-items %}
+    {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+    <a href="{% add_preserved_filters history_url %}" class="bg-transparent hover:bg-blue text-black font-semibold py-2 px-4 border border-blue rounded">
+        <i class="fa fa-book"></i> &nbsp; {% trans "History" %}
+    </a>
+
+    {% if has_absolute_url %}
+        <a href="{{ absolute_url }}"
+           class="bg-transparent hover:bg-blue text-blue-dark font-semibold py-2 px-4 border border-blue rounded">{% trans "View on site" %}</a>
+    {% endif %}
+{% endblock %}

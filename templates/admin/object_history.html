@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+{% load i18n admin_urls %}
+
+{% block breadcrumbs %}
+    <div class="flex justify-between flex-wrap md:flex-no-wrap items-center py-4">
+        <div class="block mb-4 md:mb-0">
+            <nav aria-label="breadcrumb" class="hidden md:inline-block">
+                <ol class="flex flex-wrap list-reset pt-3 pb-3 py-4 px-4 mb-4 rounded breadcrumb-dark breadcrumb-transparent">
+                    <li class="inline-block px-2 py-2 text-gray-700">
+                        <a href="{% url 'admin:index' %}">
+                            <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="inline-block px-2 py-2 text-gray-700">
+                      <a href="{% url 'admin:app_list' opts.app_config.label %}">
+                        {{ opts.app_config.verbose_name }}
+                      </a>
+                    </li>
+
+                    <li class="inline-block px-2 py-2 text-gray-700">
+                        <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+                    </li>
+
+                    <li class="inline-block px-2 py-2 text-gray-700">
+                        <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+                    </li>
+
+                    <li class="inline-block px-2 py-2 text-gray-700">{% trans 'History' %}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-wrap mx-6 mt-6">
+        <div class="w-full pr-4 pl-4">
+            <div class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+                <div class="flex-auto p-6">
+                    {% if action_list %}
+                        <div class="block w-full overflow-auto scrolling-touch" style="overflow: hidden;">
+                            <table class="w-full max-w-full mb-4 bg-transparent tablesorter table-auto {{ direction.panel }}">
+                                <thead class="text-blue-600">
+                                <tr class="">
+                                    <th class="border-b text-left" scope="col">{% trans 'User' %}</th>
+                                    <th class="border-b text-left" scope="col">{% trans 'Action' %}</th>
+                                    <th class="border-b text-left" scope="col">{% trans 'Date/time' %}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for action in action_list %}
+                                    <tr>
+                                        <td class="border-b">{{ action.user.get_username }}{% if action.user.get_full_name %} (
+                                            {{ action.user.get_full_name }}){% endif %}</td>
+                                        <td class="border-b">{{ action.get_change_message }}</td>
+                                        <td class="border-b">{{ action.action_time|date:"DATETIME_FORMAT" }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p>{% trans "This object doesn't have a change history. It probably wasn't added via this admin site." %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

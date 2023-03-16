@@ -1,0 +1,71 @@
+{% load i18n static admin_argon %}
+
+{% if result_hidden_fields %}
+    <div class="hiddenfields">{# DIV for HTML validation #}
+        {% for item in result_hidden_fields %}{{ item }}{% endfor %}
+    </div>
+{% endif %}
+
+{% if results %}
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                {% for header in result_headers %}
+                    <th scope="col" class="px-6 py-3">
+                        {% if header.sortable %}
+                            {% if header.sort_priority > 0 %}
+                                <a href="{{ header.url_remove }}" title="{% trans "Remove from sorting" %}"><span class="fa fa-arrows-alt"></span></a>&nbsp;
+                                {% if num_sorted_fields > 1 %}
+                                    <span class="fa fa-arrows-v" title="{% blocktrans with priority_number=header.sort_priority %}Sorting priority: {{ priority_number }}{% endblocktrans %}">{{ header.sort_priority }}</span>&nbsp;
+                                {% endif %}
+                                <a href="{{ header.url_toggle }}" class="fa {% if header.ascending %}fa-angle-up{% else %}fa-angle-down{% endif %}" title="{% trans "Toggle sorting" %}"></a>&nbsp;&nbsp;
+                            {% endif %}
+                        {% endif %}
+
+                        {% if header.sortable %}
+                            <a href="{{ header.url_primary }}">{{ header.text|capfirst }}</a>
+                        {% else %}
+                            {% if header.class_attrib == ' class="action-checkbox-column"' %}
+                                <div class="relative block mb-2">
+                                    <label class="text-gray-700 pl-6 mb-0">
+                                        {{ header.text|capfirst }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                <span>{{ header.text|capfirst }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            {% if result.form and result.form.non_field_errors %}
+                <tr class="bg-white border-b dark:bg-gray-800 border-black">
+                    <td colspan="{{ result|length }}">{{ result.form.non_field_errors }}</td>
+                </tr>
+            {% endif %}
+            <tr class="bg-white bg-gray-800 border-b bg-white border border-gray-300">
+                {% for item in result %}
+                    {% if 'checkbox' in item %}
+                        <td class="px-6 py-4 border-b">
+                            <div class="relative block mb-2">
+                                <label class="text-gray-700 pl-6 mb-0">
+                                    {{ item|checkbox|safe }}
+                                    <span class="form-check-sign"><span class="check"></span></span>
+                                </label>
+                            </div>
+                        </td>
+                    {% else %}
+                        <span class="fw-normal">{{ item }}</span>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+

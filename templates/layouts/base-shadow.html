@@ -1,0 +1,44 @@
+<!--
+=========================================================
+* Soft UI Dashboard Tailwind - v1.0.4
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-tailwind
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    {% include 'includes/head.html' %}
+
+  </head>
+
+  <body class="m-0 font-sans antialiased font-normal bg-white text-start text-base leading-default text-slate-500">
+
+    {% block navigation %}
+      {% include 'includes/navigation-shadow.html' %}
+    {% endblock navigation %}
+
+    <main class="mt-0 transition-all duration-200 ease-in-out">
+      {% block content %}{% endblock content %}
+    </main>
+    
+    {% block footer %}
+      {% include 'includes/footer-fullscreen.html' %}
+    {% endblock footer %}
+
+  </body>
+
+  <script src="{% static 'assets/js/plugins/perfect-scrollbar.min.js' %}" async></script>
+  <!-- main script file  -->
+  {% include 'includes/argon-dashboard-tailwind.html' %}
+
+  {% block extrascript %}{% endblock extrascript %}
+</html>

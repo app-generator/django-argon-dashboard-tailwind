@@ -1,0 +1,50 @@
+{% load i18n admin_argon %}
+
+{% if cl.paginator.num_pages > 1 %}
+    <div class="py-3 px-6 bg-gray-200 border-t-1 border-gray-300 px-3 border-0 flex flex-col lg:flex-row items-center justify-between">
+        <nav aria-label="Page navigation example">
+            <ul class="flex list-reset pl-0 rounded mb-0">
+                <li class="page-item">
+                    {% if cl.page_num > 1 %}
+                        <a class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200" href="?p={{ cl.page_num|neg_num:1 }}">Previous</a>
+                    {% else %}
+                        <span class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200">Previous</span>
+                    {% endif %}
+                </li>
+                {% if pagination_required %}
+                    {{ request.get_full_path }}
+                    {% for i in page_range %}
+                        <li class="page-item {% if i == cl.page_num %}active{% endif %}">
+                            {% paginator_number cl i %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                <li class="page-item">
+                    {% if cl.page_num < cl.paginator.num_pages %}
+                        <a class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200" href="?p={{ cl.page_num|sum_number:1 }}">Next</a>
+                    {% else %}
+                        <span class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200">Next</span>
+                    {% endif %}
+                </li>
+                {% if show_all_url %}
+                    <li class="page-item">
+                        <a href="{{ show_all_url }}" class="relative block py-2 px-3 -ml-px leading-normal text-blue bg-white border border-gray-200 no-underline hover:text-blue-800 hover:bg-gray-200">{% trans 'Show all' %}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="fw-normal text-xs mt-4 lg:mt-0">
+            Showing <b>{{ cl.result_list|length }}</b>
+            {% if cl.result_count == 1 %}
+                {{ cl.opts.verbose_name }}
+            {% else %}
+                {{ cl.opts.verbose_name_plural }}
+            {% endif %}
+            out of <b>{{ cl.result_count }}</b> entries
+        </div>
+
+        {% if cl.formset and cl.result_count %}
+            <input type="submit" name="_save" class="default" value="{% trans 'Save' %}">
+        {% endif %}
+    </div>
+{% endif %}
