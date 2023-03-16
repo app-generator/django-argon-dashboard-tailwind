@@ -1,0 +1,36 @@
+{% extends 'layouts/base-fullscreen.html' %}
+{% load i18n static %}
+
+{% block title %} Sign OUT {% endblock %}
+
+{% block navigation %}{% endblock navigation %}
+
+{% block content %}
+    <main>
+        <section class="vh-lg-100 mt-5 lg:mt-0 bg-soft flex items-center">
+            <div class="container mx-auto sm:px-4">
+                <div class="flex flex-wrap  justify-center form-bg-image">
+                    <div class="w-full flex items-center justify-center">
+                        <div class="bg-white shadow border-0 rounded p-6 lg:p-12 w-full fmxw-500">
+                            <div class="text-center md:text-center mb-4 md:mt-0">
+                                <h1 class="h3">{% trans 'Log in' %}</h1>
+                                <p class="text-gray">{% trans "Thanks for spending some quality time with the Web site today." %}</p>
+                            </div>
+                            <div class="mt-5">
+                                <div class="grid mt-3 content-center">
+                                    <a href="{% url 'admin:index' %}" class="inline-block mx-auto align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline btn-gray-800">{% trans 'Log in again' %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block extrascript %}
+    <script type="application/javascript">
+        notification.info("<p class='{{ direction.panel }}'>" + "{% trans "Thanks for spending some quality time with the Web site today." %}" + "</p>", 'top', '{{ direction.notify }}');
+    </script>
+{% endblock %}

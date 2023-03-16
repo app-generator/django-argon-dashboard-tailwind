@@ -1,0 +1,45 @@
+<!--
+=========================================================
+* Soft UI Dashboard Tailwind - v1.0.4
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-tailwind
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'includes/head.html' %}
+    {% block extrastyle %}{% endblock extrastyle %}
+  </head>
+  <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
+    {% block overlay %}
+    <div class="absolute w-full bg-blue-500 dark:hidden min-h-75"></div>
+    {% endblock overlay %}
+    {% block sidebar %}
+      {% include 'includes/sidebar.html' %}
+    {% endblock sidebar %}
+
+    <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
+      {% block navigation %}
+        {% include 'includes/navigation.html' %}
+      {% endblock navigation %}
+      {% block breadcrumbs %}{% endblock breadcrumbs %}
+      {% block content %}
+      
+      {% endblock content %}
+    </main>
+  </body>
+
+  {% include 'includes/fixed_plugin.html' %}
+
+  {% include 'includes/scripts.html' %}
+  {% block extra_js %}{% endblock extra_js %}
+
+</html>

@@ -1,0 +1,145 @@
+{% load i18n static admin_argon %}
+
+<ul class="flex flex-col pl-0 mb-0">
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'index' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap transition-colors" href="{% url 'index' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
+    </a>
+  </li>
+
+  {% if not request.user.is_authenticated %}
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'login' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'login' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-single-copy-04"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign In</span>
+    </a>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'login' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'register' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
+    </a>
+  </li>
+  {% endif %}
+
+  {% admin_get_menu as app_list %}
+  {% if app_list %}
+      {% for app in app_list %}
+          {% if app.has_perms and not app.pinned %}
+            <li class="mt-0.5 w-full">
+              <a class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap transition-colors {% if app_label != app.label and app.url not in request.path|urlencode  %} collapse{% endif %}" 
+              data-te-collapse-init
+              data-te-ripple-init
+              data-te-ripple-color="dark"
+              data-te-target="#collapseExample"
+              aria-expanded="false"
+              aria-controls="collapseExample">
+                <div class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
+                  <span class="sidebar-icon {{ app.icon }}"></span>
+                </div>
+                <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">
+                  {{ app.label|slice:15 }}{% if app.label|length > 15 %}..{% endif %}
+                </span>
+              </a>
+
+              {% if app.models %}
+              <div class="multi-level ms-5 opacity-100 block " role="list"   id="collapseExample" data-te-collapse-item>
+                <ul class="flex-col ml-6 flex flex-wrap list-none pl-0 mb-0 ">
+                  {% for model in app.models %}
+                    {% if model.url %}
+                      <li class="{% if 'bootstrap-tables' in segment or model.url in request.path|urlencode %} active {% endif %} list-unstyled">
+                        <a class="inline-block py-2 px-4 no-underline" href="{{ model.url }}">
+                          <span class="nav-link-text ms-1 text-xs">{{ model.label }}</span>
+                        </a>
+                      </li>
+                    {% else %}
+                      <li class="list-unstyled text-xs">{{ model.label }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+            </li>
+          {% endif %}
+      {% endfor %}
+  {% endif %}
+
+
+  {% if request.user.is_authenticated and not request.user.is_superuser %}
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'tables' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'tables' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Tables</span>
+    </a>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'billing' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'billing' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-credit-card"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Billing</span>
+    </a>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'vr' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'vr' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-app"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Virtual Reality</span>
+    </a>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'rtl' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'rtl' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">RTL</span>
+    </a>
+  </li>
+
+  <li class="w-full mt-4">
+    <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account pages</h6>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'profile' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'profile' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-slate-700 ni ni-single-02"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Profile</span>
+    </a>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'login' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'login' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-single-copy-04"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign In</span>
+    </a>
+  </li>
+
+  <li class="mt-0.5 w-full">
+    <a class="{% if 'login' in segment %}bg-blue-500/13 rounded-lg px-4 font-semibold text-slate-700 {% endif %} dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors" href="{% url 'register' %}">
+      <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+        <i class="relative top-0 text-sm leading-normal text-cyan-500 ni ni-collection"></i>
+      </div>
+      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Sign Up</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>

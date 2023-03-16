@@ -1,0 +1,46 @@
+{% load i18n static %}
+{% if cl.search_fields %}
+    <div class="{{ direction.panel }}">
+        <form id="changelist-search" method="get">
+            <div class="flex flex-wrap ">
+                <div class="relative flex items-stretch w-full me-2 lg:me-4 fmxw-400">
+                    <span class="block border px-2 py-1 text-gray-800 border border-gray-200 rounded">
+                      <svg class="icon" x-description="Heroicon name: solid/search"
+                           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                           aria-hidden="true">
+                          <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
+                      </svg>
+                    </span>
+                    <input type="text" class="block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" placeholder="{% trans 'Search' %}">
+                </div>
+                <div class="md:w-1/4 pr-4 pl-4 md:pl-1">
+                    <div class="mb-4">
+                        {% if show_result_count %}
+                            <span class="text-xs quiet">
+                                {% blocktrans count counter=cl.result_count %}
+                                    {{ counter }} result
+                                {% plural %}
+                                    {{ counter }} results
+                                {% endblocktrans %} (<a
+                                    href="?{% if cl.is_popup %}_popup=1{% endif %}">{% if cl.show_full_result_count %}
+                                {% blocktrans with full_result_count=cl.full_result_count %}
+                                    {{ full_result_count }} total
+                                {% endblocktrans %}
+                            {% else %}
+                                {% trans "Show all" %}
+                            {% endif %}</a>)
+                            </span>
+                        {% endif %}
+                        {% for pair in cl.params.items %}
+                            {% if pair.0 != search_var %}
+                                <input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endif %}

@@ -1,0 +1,32 @@
+{% load i18n admin_urls %}
+
+<div class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300 submit_btn">
+    <div class="flex-auto p-6">
+        {% block submit-row %}
+            {% if show_save %}
+                <button type="submit" name="_save" class="inline-block align-middle text-center select-none border font-normal whitespace-nowrap rounded  no-underline py-2 px-3 leading-tight text-xs  bg-blue-600 text-white hover:bg-blue-600">{% trans 'Save' %}</button>
+            {% endif %}
+
+            {% if show_save_as_new %}
+                <button type="submit" name="_saveasnew" class="inline-block align-middle text-center select-none border font-normal whitespace-nowrap rounded  no-underline py-2 px-3 leading-tight text-xs  bg-green-500 text-white hover:green-600">{% trans 'Save as new' %}</button>
+            {% endif %}
+
+            {% if show_save_and_add_another %}
+                <button type="submit" name="_addanother" class="inline-block align-middle text-center select-none border font-normal whitespace-nowrap rounded  no-underline py-2 px-3 leading-tight text-xs  bg-teal-500 text-white hover:bg-teal-600">{% trans 'Save and add another' %}</button>
+            {% endif %}
+
+            {% if show_save_and_continue %}
+                <button type="submit" name="_continue" class="inline-block align-middle text-center select-none border font-normal whitespace-nowrap rounded  no-underline py-2 px-3 leading-tight text-xs  bg-orange-400 text-black hover:bg-orange-500">{% if can_change %}{% trans 'Save and continue editing' %}{% else %}{% trans 'Save and view' %}{% endif %}</button>
+            {% endif %}
+
+            {% if show_close %}
+                <a href="{% url opts|admin_urlname:'changelist' %}" class="inline-block align-middle text-center select-none border font-normal whitespace-nowrap rounded  no-underline py-2 px-3 leading-tight text-xs  btn-default">{% trans 'Close' %}</a>
+            {% endif %}
+
+            {% if show_delete_link and original %}
+                {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
+                <a href="{% add_preserved_filters delete_url %}" class="inline-block align-middle text-center select-none border font-normal whitespace-nowrap rounded  no-underline py-2 px-3 leading-tight text-xs  bg-red-600 text-white hover:bg-red-700">{% trans "Delete" %}</a>
+            {% endif %}
+        {% endblock %}
+    </div>
+</div>
